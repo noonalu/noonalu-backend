@@ -8,3 +8,4 @@ Werkzeug==2.2.2
 zipp==3.9.0
 pymongo==4.3.3
 python-dotenv==0.21.0
+bson==0.5.10
