@@ -2,6 +2,7 @@ from os import environ, path
 from pymongo import MongoClient
 import logging
 import json
+from dotenv import load_dotenv
 
 #################################################################
 # USING MOCK DATA FOR NOW SHOUL NOT BE KEPT LONG TERM           #
@@ -20,10 +21,17 @@ def get_mock_data():
 #################################################################
 
 
+def open_connection():
+    load_dotenv()
+    client = MongoClient(environ.get("MONGO_URI"), int(environ.get("MONGO_PORT")))
+
+    return client.noonalu
+
+
 def get_event_data(event_tag: str) -> dict:
     """returns all data for event"""
-    client = MongoClient(environ.get("MONGO_URI"))
-    db = client.noonalu
+    mong_conn = open_connection()
+    mong_conn
     return get_all_data()["events"][event_tag]
 
 
@@ -43,5 +51,8 @@ def get_all_data():
 
 
 if __name__ == "__main__":
-    print(get_event_data("qqeV6u8"))
+    # print(get_event_data("qqeV6u8"))
     print(get_event_users("qqeV6u8"))
+    client = MongoClient("localhost", 27107)
+    db = client.test
+    print(db)
