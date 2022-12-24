@@ -44,13 +44,11 @@ def get_event_availability(event_tag: str) -> dict:
     return get_event_data(event_tag=event_tag)["availability"]
 
 
-
 def _list_all_events():
     conn = open_connection()
     coll = conn.get_collection("events")
-    coll.create_index('tag')
+    coll.create_index("tag")
     return list(coll.find())
-    
 
 
 def create_new_event():
@@ -81,7 +79,8 @@ if __name__ == "__main__":
     assert get_event_availability(tag) == {}
     assert get_event_users(tag) == []
 
-    import pprint 
+    import pprint
+
     pprint.pp(_list_all_events())
     # client = MongoClient("localhost", 27017)
     # pprint.pp(get_event_data("qqeV6u8"))
