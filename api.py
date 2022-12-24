@@ -12,12 +12,13 @@ class Event(Resource):
     @staticmethod
     def get(self):
         event_tag = request.args["id"]
-        data = db.get_event_calendar(event_tag=event_tag)
+        data = db.get_event_availability(event_tag=event_tag)
         return json.dumps(data)
 
     @staticmethod
     def post(self):
         utils.get_new_event_tag()
+
 
 class ValidateUser(Resource):
     """

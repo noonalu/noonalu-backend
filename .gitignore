@@ -175,6 +175,8 @@ cython_debug/
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 
+### Fleet ###
+.fleet/*
 # Local History for Visual Studio Code
 .history/
 

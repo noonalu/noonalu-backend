@@ -15,4 +15,4 @@ def confirm_user(event_tag: int, username: str, password: str = None):
 
 
 if __name__ == "__main__":
-    print(confirm_user("qqeV6u8","user1", None))
+    print(confirm_user("qqeV6u8", "user1", None))
