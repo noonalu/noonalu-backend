@@ -7,7 +7,7 @@ app = Flask(__name__)
 api = Api(app)
 
 # Handles all event data
-api.add_resource(Event, "/event")
+api.add_resource(Calendar, "/calendar")
 
 # Handles all user related services
 api.add_resource(ValidateUser, "/validate")

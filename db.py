@@ -1,10 +1,10 @@
 from os import environ, path
+import sys
 from typing import Any, Mapping
 
 from pymongo import MongoClient
 import logging as log
 import json
-from dotenv import load_dotenv
 
 from pymongo.database import Database
 
@@ -88,11 +88,17 @@ def get_event(event_tag: str):
     res = coll.find_one({"tag": event_tag})
 
     conn.close()
-    return dict(res)
+    
+    if res == None:
+        raise KeyError("Event does not exist")
+    
+    event = dict(res)     
+    return event
+        
+
 
 
 if __name__ == "__main__":
-    load_dotenv()
     log.basicConfig(level=log.DEBUG, stream=sys.stdout)
     tag = create_new_event()
     assert get_event(event_tag=tag)["tag"] == tag

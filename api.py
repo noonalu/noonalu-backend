@@ -1,24 +1,26 @@
 import db as db
 import utils
 from flask_restful import Resource, request
+from flask import Response
 import json
 
 
-class Event(Resource):
+class Calendar(Resource):
     """
     handles all event creation/deletion
     """
 
-    @staticmethod
+    
     def get(self):
         event_tag = request.args["id"]
+        print(event_tag)
         data = db.get_event_availability(event_tag=event_tag)
-        return json.dumps(data)
+        print(data)
+        return data
 
-    @staticmethod
     def post(self):
-        utils.get_new_event_tag()
-
+        tag = db.create_new_event()
+        return {'clendar_tag':tag}
 
 class ValidateUser(Resource):
     """
@@ -26,7 +28,7 @@ class ValidateUser(Resource):
     """
 
     @staticmethod
-    def get(self):
+    def get():
         print(request)
         body = request.get_json()
         print(body)

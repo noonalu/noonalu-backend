@@ -3,7 +3,7 @@ import db
 
 
 def get_new_event_tag():
-    return secrets.token_urlsafe(5)
+    return secrets.token_urlsafe(7)
 
 
 def get_events():
@@ -15,4 +15,4 @@ def confirm_user(event_tag: int, username: str, password: str = None):
 
 
 if __name__ == "__main__":
-    print(confirm_user("qqeV6u8", "user1", None))
+    print(confirm_user("qqeV6u8","user1", None))
