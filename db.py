@@ -49,7 +49,8 @@ def get_event_users(event_tag: str) -> dict:
 
 def get_event_availability(event_tag: str) -> dict:
     """returns calendar for event"""
-    return get_event(event_tag=event_tag)["availability"]
+    event = get_event(event_tag=event_tag)
+    return event["availability"]
 
 
 def _read_all_events() -> list:
@@ -86,16 +87,14 @@ def get_event(event_tag: str):
 
     coll = noon_data.get_collection("events")
     res = coll.find_one({"tag": event_tag})
-
     conn.close()
-    
+
     if res == None:
         raise KeyError("Event does not exist")
-    
-    event = dict(res)     
-    return event
-        
 
+    event = dict(res)
+    event.pop("_id")
+    return event
 
 
 if __name__ == "__main__":
