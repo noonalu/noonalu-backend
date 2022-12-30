@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, Response
 from dotenv import load_dotenv
 from markupsafe import escape
 import db
@@ -7,13 +7,17 @@ import json
 app = Flask(__name__)
 
 
+
 @app.route("/calendar", methods=["POST"])
 def postCaledar():
     """
     Creates a new calendar
     """
     tag = db.create_new_event()
-    return {"id": tag}
+   
+    resp = Response(status=200)
+    resp.set_data(json.dumps({"id": tag}))
+    return resp
 
 
 @app.route("/calendar/<id>", methods=["GET"])
@@ -21,11 +25,13 @@ def getCalendar(id):
     """
     Returns informations for the given clalendar.
     """
-    # print(id)
-    data = db.get_event(event_tag=id)
-    return json.dumps(data)
-    # print(data)
-    # return f"here's the data for {escape(id)}. Soon it will actually be something!"
+    try:
+        data = db.get_event(event_tag=id)
+    except:
+        return Response(status=404)
+    resp = Response(status=200)
+    resp.set_data(json.dumps(data))
+    return resp
 
 
 @app.route("/calendar/<id>/", methods=["PUT"])
@@ -35,8 +41,9 @@ def putCalendar(id):
     """
     user = escape(request.args["user"])
 
-    return f"pretending to put in data for {escape(id)} for user {user}  :)"
-
+    resp =  Response(status=200)
+    resp.set_data(f"pretending to put in data for {escape(id)} for user {user}  :)")
+    return resp
 
 if __name__ == "__main__":
     load_dotenv()
