@@ -1,5 +1,6 @@
 import requests
 import unittest
+
 import json
 
 
@@ -22,8 +23,8 @@ class CalendarTest(unittest.TestCase):
         response = requests.request("POST", url)
         resp_json_dict = json.loads(response.text)
 
-        assert "cal_id" in resp_json_dict.keys()
-        assert len(resp_json_dict["cal_id"]) == len("LBKFoaFIyA")
+        self.assertTrue("cal_id" in resp_json_dict.keys())
+        self.assertTrue(len(resp_json_dict["cal_id"]) == len("LBKFoaFIyA"))
 
     def test_put_calendar_update_user_data(self):
 
@@ -31,7 +32,7 @@ class CalendarTest(unittest.TestCase):
 
         response = requests.request("PUT", url)
 
-        assert (
+        self.assertTrue(
             response.text
             == "pretending to put in data for aHX3j8x1Ww for user peter  :)"
         )
@@ -43,15 +44,14 @@ class CalendarTest(unittest.TestCase):
 
         resp_json_dict = json.loads(response.text)
 
-        assert resp_json_dict["cal_id"] == str(self.EXISTING_CALENDAR)
+        self.assertTrue(resp_json_dict["cal_id"] == str(self.EXISTING_CALENDAR))
 
     def test_get_calendar_does_not_exist(self):
 
         url = "http://127.0.0.1:5000/calendar/fake_calendar_id"
 
         response = requests.request("GET", url)
-
-        assert response.status_code == 404
+        self.assertTrue(response.status_code == 404)
 
 
 if __name__ == "__main__":

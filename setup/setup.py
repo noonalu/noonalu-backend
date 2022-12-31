@@ -6,6 +6,9 @@ from typing import Any, Collection, Mapping
 from pymongo import MongoClient, errors
 from pymongo.database import Database
 
+import dotenv
+import pprint
+
 
 class MongConn:
     def __init__(self) -> None:
@@ -50,17 +53,13 @@ def read_all_calendars() -> list:
 
 if __name__ == "__main__":
     pprint.pp("Setting up database")
-    
-    import dotenv
-    import pprint
 
     dotenv.load_dotenv()
-    
+
     try:
         # SHOULD FAIL IF RUN MORE THAN ONCE ON THE SAME MongoDB Instance
         setup_database()
-    except(errors.CollectionInvalid):
+    except (errors.CollectionInvalid):
         pprint.pp("Collection already instantiated")
     pprint.pp("List of all calendars in database: ")
     pprint.pp(read_all_calendars())
-
