@@ -7,14 +7,13 @@ import json
 app = Flask(__name__)
 
 
-
 @app.route("/calendar", methods=["POST"])
 def postCaledar():
     """
     Creates a new calendar
     """
     tag = db.create_new_event()
-   
+
     resp = Response(status=200)
     resp.set_data(json.dumps({"id": tag}))
     return resp
@@ -41,9 +40,10 @@ def putCalendar(id):
     """
     user = escape(request.args["user"])
 
-    resp =  Response(status=200)
+    resp = Response(status=200)
     resp.set_data(f"pretending to put in data for {escape(id)} for user {user}  :)")
     return resp
+
 
 if __name__ == "__main__":
     load_dotenv()
