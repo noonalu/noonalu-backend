@@ -20,7 +20,7 @@
         - docker pull mongo 
         - docker run -p 27017:27017 --name noon -v /my/own/datadir:/data/db -d mongo 
         ```
-        This runs the docker container, opening ports 27017 and linking the /my/own/datadir on your local machine to /data/db in the mongo container.
+        This runs the docker container, opening port 27017 and linking the /my/own/datadir on your local machine to /data/db in the mongo container.
     - In a venv activated terminal, from the root of the directory, run
         ```py
         python3 setup/setup.py
