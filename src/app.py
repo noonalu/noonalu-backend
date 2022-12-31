@@ -8,40 +8,41 @@ app = Flask(__name__)
 
 
 @app.route("/calendar", methods=["POST"])
-def postCaledar():
+def post_caledar():
     """
     Creates a new calendar
     """
-    tag = db.create_new_event()
+    cal_id = db.create_new_calendar()
 
     resp = Response(status=200)
-    resp.set_data(json.dumps({"id": tag}))
+    resp.set_data(json.dumps({"cal_id": cal_id}))
     return resp
 
 
-@app.route("/calendar/<id>", methods=["GET"])
-def getCalendar(id):
+@app.route("/calendar/<cal_id>", methods=["GET"])
+def get_calendar(cal_id):
     """
     Returns informations for the given clalendar.
     """
     try:
-        data = db.get_event(event_tag=id)
+        data = db.get_calendar(cal_id=cal_id)
     except:
         return Response(status=404)
+    
     resp = Response(status=200)
     resp.set_data(json.dumps(data))
     return resp
 
 
-@app.route("/calendar/<id>/", methods=["PUT"])
-def putCalendar(id):
+@app.route("/calendar/<cal_id>/", methods=["PUT"])
+def put_calendar(cal_id):
     """
     Updates the availability of the given user on the given calendar
     """
     user = escape(request.args["user"])
 
     resp = Response(status=200)
-    resp.set_data(f"pretending to put in data for {escape(id)} for user {user}  :)")
+    resp.set_data(f"pretending to put in data for {escape(cal_id)} for user {user}  :)")
     return resp
 
 
