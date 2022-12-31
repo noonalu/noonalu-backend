@@ -1,12 +1,12 @@
 from os import environ, path
-import sys
 from typing import Any, Collection, Mapping
 
 from pymongo import MongoClient
+from pymongo.database import Database
+
 import logging as log
 import json
 
-from pymongo.database import Database
 
 import utils
 
@@ -14,14 +14,6 @@ import utils
 ##################################################################
 # USING MOCK DATA FOR NOW SHOULD NOT BE KEPT LONG TERM           #
 ##################################################################
-
-
-def get_mock_data():
-    """for use during development"""
-    here = path.dirname(__file__)
-    data = json.loads(open(here + "/mongo.json").read().strip())
-    log.warning("Using Mock Data")
-    return data
 
 
 ##################################################################
@@ -59,17 +51,6 @@ def get_calendar_availability(cal_id: str) -> dict:
     return cal["availability"]
 
 
-def _read_all_calendars() -> list:
-    """Returns a list of all calendars"""
-    conn = MongConn()
-    noon_data = conn.get_db()
-    coll = noon_data.get_collection("calendars")
-    res = coll.find(sort=[("cal_id", 1)])
-    x = list(res)
-    conn.close()
-    return x
-
-
 def create_new_calendar():
     """Creates a new event, returns the tag for the calendars"""
     conn = MongConn()
@@ -99,21 +80,3 @@ def get_calendar(cal_id: str):
     event = dict(res)
     event.pop("_id")
     return event
-
-
-def setup_database():
-    """Creates the calendar collection in the database"""
-    conn = MongConn()
-    db = conn.get_db()
-    db.create_collection("calendar")
-
-
-if __name__ == "__main__":
-    log.info("SETTING UP DATABASE")
-    import dotenv
-    import pprint
-
-    dotenv.load_dotenv()
-
-    setup_database()
-    pprint.pp(_read_all_calendars())
