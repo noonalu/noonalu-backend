@@ -92,7 +92,7 @@ def get_calendar(cal_id: str):
     coll = conn.get_collection()
     res = coll.find_one({"cal_id": cal_id})
     conn.close()
-    
+
     if res == None:
         raise KeyError("Event does not exist")
 
@@ -109,11 +109,11 @@ def setup_database():
 
 
 if __name__ == "__main__":
-    # log.info("SETTING UP DATABASE")
+    log.info("SETTING UP DATABASE")
     import dotenv
     import pprint
 
     dotenv.load_dotenv()
 
-    # setup_database()
+    setup_database()
     pprint.pp(_read_all_calendars())
