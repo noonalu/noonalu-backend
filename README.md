@@ -1,3 +1,7 @@
+
+# noonalu-backend
+The back-end of noonalu!
+
 ## Development
 
 ### Setup Dev Environment
