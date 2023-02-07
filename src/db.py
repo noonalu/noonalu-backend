@@ -1,22 +1,13 @@
-from os import environ, path
+from os import environ
 from typing import Any, Collection, Mapping
 
+from bson.objectid import ObjectId
 from pymongo import MongoClient
 from pymongo.database import Database
 
 import logging as log
-import json
 
 
-import utils
-
-
-##################################################################
-# USING MOCK DATA FOR NOW SHOULD NOT BE KEPT LONG TERM           #
-##################################################################
-
-
-##################################################################
 class MongConn:
     def __init__(self) -> None:
         """Opens a connection to the database and"""
@@ -40,38 +31,29 @@ class MongConn:
         self.mongo_client.close()
 
 
-def get_event_users(cal_id: str) -> dict:
-    """return dict of users for event"""
-    return get_calendar(cal_id=cal_id)["users"]
+def create_new_calendar(name: str, days: str):
+    """Creates a new event, returns the id for the calendar."""
 
+    week = {}
+    for day in days:
+        week[day] = []
+    calendar = {"title": name, "days": week}
 
-def get_calendar_availability(cal_id: str) -> dict:
-    """returns calendar for event"""
-    cal = get_calendar(cal_id=cal_id)
-    return cal["availability"]
-
-
-def create_new_calendar():
-    """Creates a new event, returns the tag for the calendars"""
     conn = MongConn()
-    cal_id = utils.get_new_cal_id()
-    calendar = {
-        "cal_id": cal_id,
-        "availability": {},
-        "users": [],
-    }
     calendar_collection = conn.get_collection()
-    calendar_collection.insert_one(calendar)
+    new_cal = calendar_collection.insert_one(calendar)
     conn.close()
-    log.info(calendar)
+
+    cal_id = str(new_cal.inserted_id)
+    log.info(f"Created Calendar: %s", cal_id)
     return cal_id
 
 
 def get_calendar(cal_id: str):
-    """returns dictionary containing event tied to the data"""
+    """Returns calendar information."""
     conn = MongConn()
     coll = conn.get_collection()
-    res = coll.find_one({"cal_id": cal_id})
+    res = coll.find_one({"_id": ObjectId(cal_id)})
     conn.close()
 
     if res == None:
@@ -79,4 +61,6 @@ def get_calendar(cal_id: str):
 
     event = dict(res)
     event.pop("_id")
+    log.info(f"Retrieving Calendar %s", cal_id)
     return event
+

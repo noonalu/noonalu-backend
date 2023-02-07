@@ -1,6 +1,6 @@
 from flask import Flask, request, Response
 from dotenv import load_dotenv
-from markupsafe import escape
+import logging
 import db
 import json
 
@@ -12,10 +12,16 @@ def post_caledar():
     """
     Creates a new calendar
     """
-    cal_id = db.create_new_calendar()
+
+    body = request.get_json()
+
+    name = body["title"]
+    days = body["days"]
+
+    cal_id = db.create_new_calendar(name, days)
 
     resp = Response(status=200)
-    resp.set_data(json.dumps({"cal_id": cal_id}))
+    resp.set_data(json.dumps({"id": cal_id}))
     return resp
 
 
@@ -28,24 +34,13 @@ def get_calendar(cal_id):
         data = db.get_calendar(cal_id=cal_id)
     except:
         return Response(status=404)
-    
+
     resp = Response(status=200)
     resp.set_data(json.dumps(data))
     return resp
 
 
-@app.route("/calendar/<cal_id>/", methods=["PUT"])
-def put_calendar(cal_id):
-    """
-    Updates the availability of the given user on the given calendar
-    """
-    user = escape(request.args["user"])
-
-    resp = Response(status=200)
-    resp.set_data(f"pretending to put in data for {escape(cal_id)} for user {user}  :)")
-    return resp
-
-
 if __name__ == "__main__":
     load_dotenv()
+    logging.basicConfig(level=logging.DEBUG)
     app.run()

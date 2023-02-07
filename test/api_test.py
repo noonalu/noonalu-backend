@@ -8,46 +8,35 @@ class CalendarTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """
-        Slightly redundant to since another calendar is added in the tests,
-        however we need a guaranteed existing calendar for later tests
+        Tests a post request and sets up for the get test
         """
         url = "http://127.0.0.1:5000/calendar"
-        response = requests.request("POST", url)
+        body = {"title": "test", "days": ["monday", "tuesday", "friday"]}
+        response = requests.request("POST", url, json=body)
         resp_json_dict = json.loads(response.text)
-        cls.EXISTING_CALENDAR = resp_json_dict["cal_id"]
-        print(f"Creating example calendar: {cls.EXISTING_CALENDAR}")
+        cls.EXISTING_CALENDAR_ID = resp_json_dict["id"]
+        print(f"Creating example calendar: {cls.EXISTING_CALENDAR_ID}")
 
     def test_post_calendar_create_calendar(self):
         url = "http://127.0.0.1:5000/calendar"
 
-        response = requests.request("POST", url)
+        body = {"title": "test", "days": ["monday", "tuesday", "friday"]}
+        
+        response = requests.request("POST", url,json=body)
         resp_json_dict = json.loads(response.text)
 
-        self.assertTrue("cal_id" in resp_json_dict.keys())
-        self.assertTrue(len(resp_json_dict["cal_id"]) == len("LBKFoaFIyA"))
-
-    def test_put_calendar_update_user_data(self):
-
-        url = "http://127.0.0.1:5000/calendar/aHX3j8x1Ww/?user=peter"
-
-        response = requests.request("PUT", url)
-
-        self.assertTrue(
-            response.text
-            == "pretending to put in data for aHX3j8x1Ww for user peter  :)"
-        )
+        self.assertTrue("id" in resp_json_dict.keys())
+        self.assertTrue(len(resp_json_dict["id"]) == len(self.EXISTING_CALENDAR_ID))
 
     def test_get_calender_exists(self):
-
-        url = f"http://127.0.0.1:5000/calendar/{self.EXISTING_CALENDAR}"
+        url = f"http://127.0.0.1:5000/calendar/{self.EXISTING_CALENDAR_ID}"
         response = requests.request("GET", url)
 
         resp_json_dict = json.loads(response.text)
-
-        self.assertTrue(resp_json_dict["cal_id"] == str(self.EXISTING_CALENDAR))
+        self.assertTrue(resp_json_dict["title"] == "test")
+        self.assertTrue(resp_json_dict["days"] == {"monday":[], "tuesday":[], "friday":[]})
 
     def test_get_calendar_does_not_exist(self):
-
         url = "http://127.0.0.1:5000/calendar/fake_calendar_id"
 
         response = requests.request("GET", url)
