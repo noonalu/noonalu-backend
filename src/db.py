@@ -63,4 +63,3 @@ def get_calendar(cal_id: str):
     event.pop("_id")
     log.info(f"Retrieving Calendar %s", cal_id)
     return event
-

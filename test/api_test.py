@@ -21,8 +21,8 @@ class CalendarTest(unittest.TestCase):
         url = "http://127.0.0.1:5000/calendar"
 
         body = {"title": "test", "days": ["monday", "tuesday", "friday"]}
-        
-        response = requests.request("POST", url,json=body)
+
+        response = requests.request("POST", url, json=body)
         resp_json_dict = json.loads(response.text)
 
         self.assertTrue("id" in resp_json_dict.keys())
@@ -34,7 +34,9 @@ class CalendarTest(unittest.TestCase):
 
         resp_json_dict = json.loads(response.text)
         self.assertTrue(resp_json_dict["title"] == "test")
-        self.assertTrue(resp_json_dict["days"] == {"monday":[], "tuesday":[], "friday":[]})
+        self.assertTrue(
+            resp_json_dict["days"] == {"monday": [], "tuesday": [], "friday": []}
+        )
 
     def test_get_calendar_does_not_exist(self):
         url = "http://127.0.0.1:5000/calendar/fake_calendar_id"
