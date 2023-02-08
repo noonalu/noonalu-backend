@@ -45,7 +45,7 @@ def read_all_calendars() -> list:
     conn = MongConn()
     noon_data = conn.get_db()
     coll = noon_data.get_collection("calendars")
-    res = coll.find(sort=[("cal_id", 1)])
+    res = coll.find(sort=[("_id", 1)])
     x = list(res)
     conn.close()
     return x
