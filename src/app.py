@@ -1,7 +1,7 @@
 from flask import Flask, request, Response
 from dotenv import load_dotenv
 import logging
-import db
+import src.db as db
 import json
 
 app = Flask(__name__)
