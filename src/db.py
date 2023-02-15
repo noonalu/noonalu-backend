@@ -7,13 +7,26 @@ from pymongo.database import Database
 
 import logging as log
 
+DATABASE_NAME = "noonalu-api"
+
 
 class MongConn:
     def __init__(self) -> None:
-        """Opens a connection to the database and"""
-        self.mongo_client = MongoClient(
-            environ.get("MONGO_URI"), int(environ.get("MONGO_PORT"))
-        )
+        """Opens a connection to the database"""
+        if environ.get("MONGO_URL") != None:
+            self.mongo_client = MongoClient(environ.get("MONGO_URL"))
+        elif environ.get("MONGO_URI") != None and environ.get("MONGO_PORT") != None:
+            self.mongo_client = MongoClient(
+                environ.get("MONGO_URI"), int(environ.get("MONGO_PORT"))
+            )
+        else:
+            print(
+                "Error: Missing MONGO_URL or MONGO_URI and MONGO_PORT environment variables"
+            )
+            exit(1)
+
+        self.mongo_client.get_database(DATABASE_NAME)
+
         self.mongo_client.get_database("noonalu")
 
     def get_db(self) -> Database[Mapping[str, Any] | Any]:
