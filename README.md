@@ -31,12 +31,12 @@ The back-end of noonalu!
         ```    
     - This should go through an instantiate the collection needed to store our data
 3. Confirm all is working
-    - In the venv, from the root of the directory, run
+    - In the venv, from the `src` directory, run
         ```py
-        python3 src/app.py
+        python3 -m flask run
         ```
         This brings up the api. 
-    - In a separate  (still venv activated) terminal run
+    - In a separate (still venv activated) terminal, from the root directory, run
         ```py
         python3 test/api_test.py
         ```
