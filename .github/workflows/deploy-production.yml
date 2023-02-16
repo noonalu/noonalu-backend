@@ -20,4 +20,3 @@ jobs:
           branch: main
           git_remote_url: "ssh://dokku@ec2-34-230-173-178.compute-1.amazonaws.com:22/noonalu-api"
           ssh_private_key: ${{ secrets.DOKKU_SSH_PRIVATE_KEY }}
-          trace: "1"
