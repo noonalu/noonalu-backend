@@ -40,6 +40,29 @@ def get_calendar(cal_id):
     return resp
 
 
+@app.route("/calendar/<cal_id>", methods=["PUT"])
+def get_calendar(cal_id):
+    """
+    Updates availability of user for calendar
+    """
+    try:
+        calendar = db.get_calendar(cal_id=cal_id)
+    except:
+        return Response(status=404)
+
+    body = request.get_json()
+
+    name = body["username"]
+    timestamps = body["availability"]
+
+    cal_id = db.create_new_calendar(name, days)
+
+
+    resp = Response(status=200)
+    resp.set_data(json.dumps(data))
+    return resp
+
+
 if __name__ == "__main__":
     load_dotenv()
     logging.basicConfig(level=logging.DEBUG)

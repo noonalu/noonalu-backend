@@ -62,6 +62,37 @@ def create_new_calendar(name: str, days: str):
     return cal_id
 
 
+def update_availability(cal_id: str, username: str, availability: list):
+    conn = MongConn()
+    coll = conn.get_collection()
+    res = coll.find_one({"_id": ObjectId(cal_id)})
+
+    if res == None:
+        raise KeyError("Event does not exist")
+
+    if res["availability"] == None:
+        timestamps = {}
+    else:
+        timestamps = res["availability"]
+
+    for time in availability:
+        if timestamps[time] == None or timestamps[time] == []:
+            timestamps[time] = [username]
+        elif username in timestamps[time]:
+            timestamps[time].remove(username)
+        else:
+            timestamps[time].append(username)
+
+        # add user to timestamp, or remove user from time stamp depending on if it exists
+
+    conn.close()
+
+    event = dict(res)
+    event.pop("_id")
+    log.info(f"Retrieving Calendar %s", cal_id)
+    return event
+
+
 def get_calendar(cal_id: str):
     """Returns calendar information."""
     conn = MongConn()
